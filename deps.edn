@@ -1,0 +1,3 @@
+{:paths ["src" "test" "resources"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}}
+ :resource-paths ["resources", "resources/aoc2020"]}
