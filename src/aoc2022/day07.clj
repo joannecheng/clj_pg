@@ -61,7 +61,7 @@ $ ls
         (recur
          (update-in fs (conj dirs :size) + last-size)
          (pop dirs)
-         (+ (get-in fs (conj dirs :size)) last-size))
+         size)
         fs))))
 
 (get-in {:a 1} [:a :b])
@@ -101,7 +101,6 @@ $ ls
                 fs)
     @sums))
 
-
 (defn total
   [fs]
   (get-in fs ["/" :size]))
@@ -114,7 +113,6 @@ $ ls
     (w/postwalk (fn [x]
                   (when (and (coll? x)
                              (= (first x) :size)) ;; is a colll
-                    (prn "second" (second x))
                     (when (<= (- total-size (second x)) max-size)
                       (swap! dirs-to-delete #(conj % (second x)))))
                   x)
@@ -132,11 +130,9 @@ $ ls
      str/split-lines
      (partition-by #(re-matches cd-regex %))
      (reduce operate init-fs)
-     find-answer)
+     find-answer-2)
 
 (def real-input (slurp (io/resource "aoc2022/day07.txt")))
-
-70000000
 
 (def real-fs
   (->> real-input
@@ -144,5 +140,8 @@ $ ls
        (partition-by #(re-matches cd-regex %))
        (reduce operate init-fs)))
 
-(-> real-fs
-    find-answer-2)
+(->> real-fs
+     find-answer-2
+     (apply min))
+
+;; 15835880 is too high
